@@ -1,0 +1,13 @@
+<?php foreach ($posts as $post): ?> 
+<div class="panel panel-info">
+	<div class="panel-heading">
+		<h3 class="panel-title"><?= $post['title'] ?> </h3>
+		<span class="label label-success pull-right"><?= $post['category'] ?></span>
+
+	</div>
+	<div class="panel-body">
+		<?= $post['content'] ?>
+	</div>
+</div>
+
+<?php endforeach ?> 

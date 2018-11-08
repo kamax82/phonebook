@@ -1,0 +1,15 @@
+<ul class="pagination">
+	<?php if ($page > 1 ): ?>
+	<li><a href="?page=<?= $page-1 ?>">&laquo;</a></li>
+	<?php endif ?>
+	<?php foreach (range(1, $max_page) as $page_number):?>
+		<li>
+			<a href="?page=<?= $page_number ?>">
+				<?= $page_number ?>
+			</a>
+		</li>
+	<?php endforeach; ?>
+	<?php if ($page < $max_page): ?>
+	<li><a href="?page=<?= $page +1 ?>">&raquo;</a></li>
+	<?php endif ?>
+</ul>
