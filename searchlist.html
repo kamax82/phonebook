@@ -1,0 +1,19 @@
+<div class="container">
+	<div class="panel panel-info">
+	    <div class="panel-heading clearfix">
+	      <h4 class="panel-title pull-left" style="padding-top: 7.5px;"><?= $search_result['name'] . ' '. $search_result['sname'] ?></h4>
+	      <div class="btn-group pull-right">
+	        <a href="#" name="" class="btn btn-default btn-sm">## Edit</a>
+	        <button type="submit" name="delete_cont" id="delete_cont" class="btn btn-default btn-sm">Delete</a>
+	      </div>
+	    </div>
+	    <table class="table table-condensed">
+	        <thead>
+	            <tr>
+	                <th class="col-md-1"> <?= $search_result['tel'] ?></th>
+	                <th><?= $search_result['email'] ?></th>
+	            </tr>
+	        </thead>
+	      </table>
+	</div>
+</div>

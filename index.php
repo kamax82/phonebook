@@ -1,8 +1,43 @@
-<?php 
+<?php
+$contactsperpage = 10;
+$page = isset($_GET['page']) && (int)$_GET['page'] > 0 
+		? (int)$_GET['page']
+		: 1;
+$offset = ($page -1) * $contactsperpage;
 
-require_once 'init.php';
-require 'tpl/base.html';
 
-// $render_content = function(){
+require 'nav.html';
+require 'conn.php';
+include 'sort.html';
 
-// };
+
+$contacts = mysqli_query($conn, 
+	"SELECT * FROM contacts LIMIT $offset, $contactsperpage");
+
+$totalcontacts = mysqli_fetch_row(mysqli_query($conn, "SELECT count(*) FROM contacts"))[0];
+
+$contact = mysqli_fetch_assoc($contacts);
+
+$max_page = ceil($totalcontacts / $contactsperpage);
+
+foreach ($contacts as $contact) {
+	include 'list.html';
+ } 
+
+
+
+
+  	  		
+
+	
+
+include 'pager.html';
+
+
+
+
+
+
+
+
+ ?>
