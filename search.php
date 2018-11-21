@@ -1,32 +1,39 @@
 <?php 
-require 'nav.html';
-require 'search_contact.html';
-require 'conn.php';
+include 'conn.php';
 
-if(isset($_REQUEST['search'])){
-	
-    $search_request = $_POST['search'];
+$render_content = function(){
+global $conn;
 
-   	$result = mysqli_query($conn,
-   			"SELECT *
-             FROM contacts 
-             WHERE name LIKE '%$search_request%'
-             OR sname LIKE '%$search_request%'
-             OR tel LIKE '%$search_request%'
-             OR email LIKE '%$search_request%'"
-   			);
-  	    foreach ($result as $search_result) {
- 		include 'searchlist.html';
- 	}
-		
-}
+include 'search_contact.html';
+    if(isset($_REQUEST['search'])){
+      
+        $search_request = $_POST['search'];
 
-if(isset($_REQUEST['delete_cont'])) {
+        $result = mysqli_query($conn,
+            "SELECT *
+                 FROM contacts 
+                 WHERE name LIKE '%$search_request%'
+                 OR sname LIKE '%$search_request%'
+                 OR tel LIKE '%$search_request%'
+                 OR email LIKE '%$search_request%'"
+            );
+            foreach ($result as $search_result) {
+            include 'searchlist.html';
+      
+      }
+        
+    
+    }
+};
 
-$cont_id_del = ($_POST['id']);
-$del = ysqli_query($conn, 
-	"DELETE FROM contacts WHERE contacts.id = 'id'" );
-}
+include 'nav.html';
+
+// if(isset($_REQUEST['delete_cont'])) {
+
+// $cont_id_del = ($_POST['id']);
+// $del = ysqli_query($conn, 
+//   "DELETE FROM contacts WHERE contacts.id = 'id'" );
+// }
 
 
        

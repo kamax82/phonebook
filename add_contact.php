@@ -1,9 +1,10 @@
 <?php 
-require 'nav.html';
-require 'add_contact.html';
+include 'conn.php';
 
 
-require 'conn.php';
+$render_content = function(){
+global $conn;
+include 'add_contact.html';
 
 if ($_SERVER['REQUEST_METHOD']==='POST'){
 	$name = mysqli_real_escape_string($conn, $_POST['name']);
@@ -16,9 +17,10 @@ if ($_SERVER['REQUEST_METHOD']==='POST'){
 		VALUES ('{$name}', '{$sname}', {$tel}, '{$email}')");
 	}
 	 	
-		
+};		
 
 
+include 'nav.html';
 
 
 
