@@ -2,10 +2,11 @@
 
 function handle_user_request(){
 	
-	if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['name'], $_POST['password'])){
+	if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['name'], $_POST['password'], $_POST['code'])){
 		return [
 		'name' => $_POST ['name'],
-		'pass' => $_POST ['password']
+		'pass' => $_POST ['password'],
+		'code' => $_POST ['code'],
 		];
 	}
 	return NULL;
@@ -36,11 +37,14 @@ function register_user($user_array){
 function login_user($user_array){
 	global $conn;
 	$user = mysqli_fetch_assoc(mysqli_query($conn,	"SELECT * FROM users WHERE name ='{$user_array['name']}'"));
-	if ($user && password_verify($user_array['pass'], $user['pass'])) {
+	if ($user && password_verify($user_array['pass'], $user['pass']) && ($_POST['code'] == $_SESSION['code'])){
+			
 		$_SESSION['messages'][] = ['success', 'You are loged in'];
 		unset($user['pass']);
 		$_SESSION['user'] = $user;
 		end_and_home();
+	}else{
+		$_SESSION['messages'][] = ['danger', 'Incorrect password or captcha'];
 	}
 }
 
@@ -59,6 +63,9 @@ function only_for_admin(){
 	}
 
 }
+
+
+
 
 function end_and_home(){
 	header('location: /index.php');
