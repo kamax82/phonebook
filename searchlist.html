@@ -3,10 +3,14 @@
 	    <div class="panel-heading clearfix">
 	      <h4 class="panel-title pull-left" style="padding-top: 7.5px;"><?= $search_result['name'] . ' '. $search_result['sname'] ?></h4>
 	      <div class="btn-group pull-right">
-	      	<!-- <?php if ($user['is_admin']): ?>
-	        <button type="submit" name="edit_cont" id="edit_cont" class="btn btn-default btn-sm">Edit</a>
-	        <button type="submit" name="delete_cont" id="delete_cont" class="btn btn-default btn-sm">Delete</a>
-	        <?php endif ?> -->
+	      	<?php
+	      	global $user;
+	      	if($user['is_admin']): ?>
+	      	<form action="" class="form-horizontal" role="form">
+	      		<a href="edit_contact.php?cont_id=<?= $search_result['id'] ?>" >Edit</a>
+	      	    <a href="del_contact.php?cont_id=<?= $search_result['id'] ?>" onclick="return confirm('Вы уверены?')">Удалить</a>
+	        </form>
+	        <?php endif ?>
 	      </div>
 	    </div>
 	    <table class="table table-condensed">

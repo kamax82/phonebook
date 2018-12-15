@@ -2,11 +2,10 @@
 
 function handle_user_request(){
 	
-	if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['name'], $_POST['password'], $_POST['code'])){
+	if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['name'], $_POST['password'])){
 		return [
 		'name' => $_POST ['name'],
-		'pass' => $_POST ['password'],
-		'code' => $_POST ['code'],
+		'pass' => $_POST ['password']
 		];
 	}
 	return NULL;
@@ -36,22 +35,49 @@ function register_user($user_array){
 
 function login_user($user_array){
 	global $conn;
+	$name = $_POST['name'];
 	$user = mysqli_fetch_assoc(mysqli_query($conn,	"SELECT * FROM users WHERE name ='{$user_array['name']}'"));
-	if ($user && password_verify($user_array['pass'], $user['pass']) && ($_POST['code'] == $_SESSION['code'])){
-			
-		$_SESSION['messages'][] = ['success', 'You are loged in'];
-		unset($user['pass']);
-		$_SESSION['user'] = $user;
-		end_and_home();
+	$corr_user = mysqli_fetch_assoc(mysqli_query($conn,	"SELECT name FROM users WHERE name ='$name'"));
+	
+	if ($name == $corr_user['name']) {
+		if ($_SESSION['attempts']<3){
+			if(password_verify($user_array['pass'], $user['pass'])){ 
+			$_SESSION['messages'][] = ['success', 'You are loged in'];
+			unset($user['pass']);
+			$_SESSION['user'] = $user;
+			end_and_home();
+			}else{
+				$_SESSION['messages'][] = ['danger', 'Incorrect password'];	
+				$_SESSION['attempts']++;
+			}
+		}
+		elseif($_POST['code'] == $_SESSION['code']){
+			if(password_verify($user_array['pass'], $user['pass'])){
+				$_SESSION['messages'][] = ['success', 'You are loged in'];
+				unset($user['pass']);
+				$_SESSION['user'] = $user;
+				end_and_home();
+			}else{
+				$_SESSION['messages'][] = ['danger', 'Incorrect password'];	
+			}
+
+		}else{
+				$_SESSION['messages'][] = ['danger', 'Incorrect captcha'];	
+			}
 	}else{
-		$_SESSION['messages'][] = ['danger', 'Incorrect password or captcha'];
-	}
+				$_SESSION['messages'][] = ['danger', 'User does not exist' ];	
+				$_SESSION['attempts']++;
+			}
 }
+
+
 
 function logout_user(){
 	unset($_SESSION['user']);
 	$_SESSION['messages'][] = ['success', 'You are loged out'];
-	end_and_home();
+	$_SESSION['attempts']=0;
+	header('location: /login.php');
+	exit();
 }
 
 
@@ -63,9 +89,6 @@ function only_for_admin(){
 	}
 
 }
-
-
-
 
 function end_and_home(){
 	header('location: /index.php');

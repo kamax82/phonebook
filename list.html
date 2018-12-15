@@ -1,10 +1,25 @@
 <div class="container">
 	<div class="panel panel-info">
-		<div class="panel-heading">
-			<h2 class="panel-title"><?= $contact ['name'] . ' '. $contact ['sname'] ?></h2>
-		</div>
-		<div class="panel-body">
-			<?= 'тел: ' . $contact['tel'] . '	емайл: ' . $contact ['email'] ?>
-			</div>
+	    <div class="panel-heading clearfix">
+	      <h4 class="panel-title pull-left" style="padding-top: 7.5px;"><?= $contact ['name'] . ' '. $contact ['sname'] ?></h4>
+	      <div class="btn-group pull-right">
+	      	<?php
+	      	global $user;
+	      	if($user['is_admin']): ?>
+	      	<form action="" class="form-horizontal" role="form">
+	      		<a href="edit_contact.php?cont_id=<?= $contact['id'] ?>" >Edit</a>
+	      	    <a href="del_contact.php?cont_id=<?= $contact['id'] ?>" onclick="return confirm('Вы уверены?')">Удалить</a>
+	        </form>
+	        <?php endif ?>
+	      </div>
+	    </div>
+	    <table class="table table-condensed">
+	        <thead>
+	            <tr>
+	                <th class="col-md-1"> <?= $contact['tel'] ?></th>
+	                <th><?= $contact ['email'] ?></th>
+	            </tr>
+	        </thead>
+	      </table>
 	</div>
 </div>

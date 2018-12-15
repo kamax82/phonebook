@@ -15,8 +15,10 @@ if ($_SERVER['REQUEST_METHOD']==='POST'){
 	mysqli_query($conn,
 		"INSERT INTO contacts (name, sname, tel, email) 
 		VALUES ('{$name}', '{$sname}', {$tel}, '{$email}')");
+	$_SESSION['messages'][] = ['success', 'Contact has been added'];
+	 header('location: /add_contact.php');
+     exit();	
 	}
-	 	
 };		
 
 

@@ -19,13 +19,13 @@
 					<input type="password" name="password" id="inputPas" class="form-control" required="required" title="">
 				</div>
 			</div>
-<form action="captcha.php" method="post" enctype="multipart/form-data">
-<!-- Форма будет отправлять введенные пользователем данные скрипту captcha.php методом POST -->
-<img src='captcha.php' id='capcha-image'>
-<!-- Сама капча -->
-<a href="javascript:void(0);" onclick="document.getElementById('capcha-image').src='captcha.php?rid=' + Math.random();">Обновить капчу</a>
-<!-- Ссылка на обновление капчи. Запрашиваем у captcha.php случайное изображение.  -->
-<span>Введите капчу:</span>
-<input type="text" name="code">
-<button type="submit" name="submit" class="btn btn-primary"><?= $submit_label ?></button>
-</form>
+		<div class="form-group">
+			<div class="col-sm-10 col-sm-offset-2">
+				<?php 
+				if($_SESSION['attempts'] >=3){
+					include_once 'capcha.html';
+				}
+				?>
+				<button type="submit" class="btn btn-primary"><?= $submit_label ?></button>
+			</div>
+		</div>

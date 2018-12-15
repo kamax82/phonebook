@@ -1,0 +1,10 @@
+<form action="captcha.php" method="post" enctype="multipart/form-data">
+<!-- Форма будет отправлять введенные пользователем данные скрипту captcha.php методом POST -->
+<img src='captcha.php' id='capcha-image'>
+<!-- Сама капча -->
+<a href="javascript:void(0);" onclick="document.getElementById('capcha-image').src='captcha.php?rid=' + Math.random();">UPD</a>
+<!-- Ссылка на обновление капчи. Запрашиваем у captcha.php случайное изображение.  -->
+<span>Enter code:</span>
+<input type="text" name="code" required="">
+
+</form>
