@@ -39,38 +39,57 @@ function login_user($user_array){
 	$user = mysqli_fetch_assoc(mysqli_query($conn,	"SELECT * FROM users WHERE name ='{$user_array['name']}'"));
 	$corr_user = mysqli_fetch_assoc(mysqli_query($conn,	"SELECT name FROM users WHERE name ='$name'"));
 	
-	if ($name == $corr_user['name']) {
-		if ($_SESSION['attempts']<3){
-			if(password_verify($user_array['pass'], $user['pass'])){ 
-			$_SESSION['messages'][] = ['success', 'You are loged in'];
-			unset($user['pass']);
-			$_SESSION['user'] = $user;
-			end_and_home();
-			}else{
-				$_SESSION['messages'][] = ['danger', 'Incorrect password'];	
-				$_SESSION['attempts']++;
-			}
-		}
-		elseif($_POST['code'] == $_SESSION['code']){
-			if(password_verify($user_array['pass'], $user['pass'])){
+		if ($name == $corr_user['name']) {
+			if ($_SESSION['attempts']<3){
+				if(password_verify($user_array['pass'], $user['pass'])){ 
 				$_SESSION['messages'][] = ['success', 'You are loged in'];
 				unset($user['pass']);
 				$_SESSION['user'] = $user;
 				end_and_home();
+				}else{
+					$_SESSION['messages'][] = ['danger', 'Incorrect password'];	
+					$_SESSION['attempts']++;
+				}
+			}elseif($_POST['code'] == $_SESSION['code']){
+				if(password_verify($user_array['pass'], $user['pass'])){
+					$_SESSION['messages'][] = ['success', 'You are loged in'];
+					unset($user['pass']);
+					$_SESSION['user'] = $user;
+					end_and_home();
+				}else{
+					$_SESSION['messages'][] = ['danger', 'Incorrect password'];	
+				}
+
 			}else{
-				$_SESSION['messages'][] = ['danger', 'Incorrect password'];	
-			}
-
+					$_SESSION['messages'][] = ['danger', 'Incorrect captcha'];	
+				}
 		}else{
-				$_SESSION['messages'][] = ['danger', 'Incorrect captcha'];	
-			}
-	}else{
-				$_SESSION['messages'][] = ['danger', 'User does not exist' ];	
-				$_SESSION['attempts']++;
-			}
+					$_SESSION['messages'][] = ['danger', 'User does not exist' ];	
+					$_SESSION['attempts']++;
+				}
+				
+// 	$errors = [];
+// 	if ($_SESSION['attempts']>=3) {
+// 		if($_POST['code'] != $_SESSION['code']){
+// 	        $errors[] = 'Incorrect captcha';
+// 	    }
+// 	}
+
+// 	if(!$errors){
+// 	  	if($user && password_verify($user_array['pass'], $user['pass'])){
+// 			echo 'You are loged in';
+// 			unset($user['pass']);
+// 			$_SESSION['user'] = $user;
+// 			end_and_home();
+// 		}else{
+// 			$errors[] = 'Authorisation failed!';
+// 			$_SESSION['attempts']++;
+// 		}  
+// 	}
+// 	return $errors;
+
 }
-
-
+	
 
 function logout_user(){
 	unset($_SESSION['user']);
@@ -97,76 +116,5 @@ function end_and_home(){
 }
 
 
-
-
-
-
-
-
-
-
-
-
-
-// function get_name_from_post(){
-// 	if (isset($_POST['name'])) {
-// 		return $_POST['name'];
-// 	}
-// 	return NULL;
-// }
-
-
-// function save_category($name){
-// 	global $conn;
-// 	mysqli_query($conn, "INSERT INTO categories(name) VALUES('{$name}')");
-// 		if(mysqli_error($conn)){
-// 			$_SESSION['messages'][] = ['warning', "Category '{$name}' already exists"];
-// 		}else{
-// 			$_SESSION['messages'][] = ['success', "Category '{$name}' has been created"];
-// 		}	
-// 		header('location:' . $_SERVER['REQUEST_URI']);
-// 		exit();
-// 	}
-
-// function save_maker($name){
-// 	global $conn;
-// 	mysqli_query($conn, "INSERT INTO makers(name) VALUES('{$name}')");
-// 		if(mysqli_error($conn)){
-// 			$_SESSION['messages'][] = ['warning', "Makers '{$name}' already exists"];
-// 		}else{
-// 			$_SESSION['messages'][] = ['success', "Makers '{$name}' has been created"];
-// 		}	
-// 		header('location:' . $_SERVER['REQUEST_URI']);
-// 		exit();
-// 	}
-
-// function get_item_from_post(){
-// 	if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-// 		foreach (['model', 'category', 'maker'] as $var) {
-// 			if (isset($_POST[$var])) {
-// 				$$var = $_POST[$var];
-// 			}else{
-// 				$$var = NULL;
-// 			}
-// 		}
-// 		if (isset($_FILES['image']) && $_FILES['image']['error'] === 0) {
-// 			$destination = '/public/'. time(). '.png';
-// 			move_uploaded_file($_FILES['image']['tmp_name'], '..' . $destination);
-// 		}else{
-// 			$destination = NULL;
-// 		}
-// 		return[
-// 			'model' => $model,
-// 			'category' => $category,
-// 			'maker' => $maker,
-// 			'image_path' => $destination
-// 		];
-// 	}
-// }
-
-
-// function save_item($item){
-// 	var_dump($item);
-// }
 
  ?>
